@@ -22,6 +22,8 @@ services:
   pgadmin:
     container_name: pgadmin4
     image: dpage/pgadmin4
+    logging:
+      driver: none
     restart: always
     environment:
       - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
@@ -47,7 +49,7 @@ services:
     environment:
       - DB_TYPE=${DB_TYPE}
       - POSTGRES_HOST=${POSTGRES_HOST}
-      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - DB_NAME=${DB_NAME}
       - POSTGRES_PORT=${POSTGRES_PORT}

@@ -1,6 +1,15 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  UseGuards,
+  Request,
+} from '@nestjs/common';
 import { User } from './entity/user.entity';
 import { UsersService } from './users.service';
+import { SignUpDto } from './dto/sign-up.dto';
+
 User;
 @Controller('users')
 export class UsersController {
@@ -11,8 +20,8 @@ export class UsersController {
     return await this.usersService.findAll();
   }
 
-  @Post()
-  async createUser(@Body() newUser: Object) {
-    return await this.usersService.createUser(newUser);
+  @Post('sign-up')
+  async signUp(@Body() signUpDto: SignUpDto) {
+    return await this.usersService.signUp(signUpDto);
   }
 }

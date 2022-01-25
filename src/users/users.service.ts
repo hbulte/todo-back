@@ -1,7 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entity/user.entity';
+import * as bcrypt from 'bcrypt';
+import { BaseExceptionFilter } from '@nestjs/core';
+
 Repository;
 @Injectable()
 export class UsersService {
@@ -13,8 +21,26 @@ export class UsersService {
   async findAll(): Promise<User[]> {
     return await this.usersRepository.find();
   }
-  async createUser(newUser) {
-    await this.usersRepository.save(newUser);
-    return 'user created';
+
+  async findOne(username: string): Promise<User> {
+    return await this.usersRepository.findOne({ username: username });
+  }
+
+  async signUp({ username, email, password }) {
+    const salt = await bcrypt.genSalt();
+    const hash = await bcrypt.hash(password, salt);
+    const newUser = {
+      username: username,
+      email: email,
+      salt: salt,
+      hash: hash,
+    };
+
+    try {
+      await this.usersRepository.save(newUser);
+    } catch (error) {
+      throw new ConflictException("le username ou l'email existe déjà");
+    }
+    return 'user created + token';
   }
 }
