@@ -26,8 +26,7 @@ export class User extends TimestampEntities {
   hash: string;
 
   @OneToMany((type) => TodoEntity, (todo) => todo.user, {
-    onUpdate: 'CASCADE',
-    onDelete: 'CASCADE',
+    cascade: ['insert', 'update', 'remove'],
   })
   @JoinColumn({ name: 'todos_id' })
   todos: TodoEntity[];

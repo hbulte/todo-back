@@ -6,6 +6,7 @@ import {
   Request,
   Patch,
   Delete,
+  Get,
 } from '@nestjs/common';
 import { TodoService } from './todos.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
@@ -14,29 +15,51 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 export class TodoController {
   constructor(private readonly todoService: TodoService) {}
 
+  @Get()
+  @UseGuards(JwtAuthGuard)
+  async getTodo(@Request() req) {
+    const { user } = req;
+    return await this.todoService.getTodo(user);
+  }
+
   @UseGuards(JwtAuthGuard)
   @Post('add-todo')
-  async addTodo(@Request() req, @Body() todo) {
-    const userId = req.user.id;
-    return await this.todoService.addTodo(todo, userId);
+  async addTodo(@Request() req) {
+    const user = req.user;
+    return await this.todoService.addTodo(user);
   }
 
   @UseGuards(JwtAuthGuard)
   @Post('add-task')
-  async addTask(@Body() task) {
-    return await this.todoService.addTask(task);
+  async addTask(@Body() body, @Request() req) {
+    const { todoId } = body;
+
+    const { user } = req;
+    return await this.todoService.addTask(todoId, user);
   }
 
   @UseGuards(JwtAuthGuard)
   @Delete('delete-task')
-  async deleteTask(@Body() task) {
-    console.log(task);
-    return await this.todoService.deleteTask(task);
+  async deleteTask(@Body() body, @Request() req) {
+    const { taskId } = body;
+    const { user } = req;
+    return await this.todoService.deleteTask(taskId, user);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch('update-todo')
+  async updateTodo(@Body() body, @Request() req) {
+    const { user } = req;
+    console.log(body, user);
+    return await this.todoService.updateTodo(body, user);
   }
 
   @UseGuards(JwtAuthGuard)
   @Delete('delete-todo')
-  async deletetodo(@Body() todo) {
-    return this.todoService.deleteTodo(todo);
+  async deletetodo(@Body() body, @Request() req) {
+    const { todoId } = body;
+
+    const { user } = req;
+    return this.todoService.deleteTodo(todoId, user);
   }
 }

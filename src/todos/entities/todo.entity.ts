@@ -1,3 +1,4 @@
+import { TimestampEntities } from 'src/generic/timestamp-entities';
 import { User } from 'src/users/entity/user.entity';
 import {
   Column,
@@ -10,7 +11,7 @@ import {
 import { TaskEntity } from './task.entity';
 
 @Entity()
-export class TodoEntity {
+export class TodoEntity extends TimestampEntities {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 

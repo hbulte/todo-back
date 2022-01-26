@@ -9,6 +9,8 @@ import { Repository } from 'typeorm';
 import { User } from './entity/user.entity';
 import * as bcrypt from 'bcrypt';
 import { BaseExceptionFilter } from '@nestjs/core';
+import { TodoEntity } from 'src/todos/entities/todo.entity';
+import { TaskEntity } from '../todos/entities/task.entity';
 
 Repository;
 @Injectable()
@@ -41,6 +43,6 @@ export class UsersService {
     } catch (error) {
       throw new ConflictException("le username ou l'email existe déjà");
     }
-    return 'user created + token';
+    return;
   }
 }
